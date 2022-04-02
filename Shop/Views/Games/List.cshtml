@@ -2,16 +2,10 @@
     <h3>@Model.currentCategory</h3>
     <div class= "row mt-5 mb-2">
         @{
-            foreach (var game in Model.AllGames)
+            foreach (Game game in Model.AllGames)
             {
-
-                <div class="col-lg-4">
-                    <img class="img-thumbnail"  src="@game.img" alt="@game.gamename" />
-                    <h2>@game.gamename</h2>
-                    <p>@game.shortdesc</p>
-                    <p>Ціна: @game.price.ToString("c")</p>
-                    <p><a class="btn btn-warning" href="#">Детальніше</a></p>
-                </div>
+            @Html.Partial("AllGames", game)
             }
-        }
+         }
     </div>
+ 

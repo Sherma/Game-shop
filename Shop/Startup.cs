@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shop.Data;
 using Shop.Data.Interfaces;
 using Shop.Data.Mocks;
+using Shop.Data.Models;
 using Shop.Data.Repository;
 
 namespace Shop
@@ -29,7 +30,14 @@ namespace Shop
             services.AddDbContext<AppDBContent>(options => options.UseSqlServer(_confstring.GetConnectionString("DefaultConnection")));
             services.AddTransient<iAllGames, GameRepository>();
             services.AddTransient<iGameCategory, CategoryRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(sp => ShopCart.GetCart(sp));
+
             services.AddMvc(option => option.EnableEndpointRouting = false);
+
+            services.AddMemoryCache();
+            services.AddSession();
+
             
         }
 
@@ -39,6 +47,7 @@ namespace Shop
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseMvcWithDefaultRoute();
 
             using (var scope = app.ApplicationServices.CreateScope())
